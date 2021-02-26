@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Pizza Restaurant</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'styles/bootstrap.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'styles/loginpagec.css' %}">
+
+</head>
+<body>
+	<h2 class="heading">Book Review Site</h2>
+
+	<div class="jumbotron loginform" >
+		<form action="{% url 'loginpage' %}" method="POST">
+			{% csrf_token %}
+		  <div class="form-group">
+		    <label for="exampleInputuser1">Username</label>
+		    <input type="texy" class="form-control" id="exampleInputuser1" required="required" placeholder="Enter Username" name="loginuser">
+		  </div>
+		  <div class="form-group">
+		    <label for="exampleInputPassword1">Password</label>
+		    <input type="password" class="form-control" id="exampleInputPassword1" required="required" placeholder="Password" name="loginpassword">
+		  </div>
+		  <button type="submit" class="btn btn-success">Login</button>
+		</form>
+
+		<div style="margin-top: 10px">
+			<a href="{% url 'regispage' %}">click here to Register account</a>
+		</div>
+		
+	</div>
+</body>
+</html>

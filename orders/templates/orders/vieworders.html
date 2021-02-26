@@ -1,0 +1,15 @@
+{% extends 'orders/base.html' %}
+
+{% block bodytitle %}Your Orders{% endblock %}
+
+{% block body %}
+<div>
+{% for i in details%}
+    <p>{{i}}</p>
+
+    
+{% endfor %}
+    <p></p>
+    <h3>Your Bill is : {{total}}</h3>
+</div>
+{% endblock %}

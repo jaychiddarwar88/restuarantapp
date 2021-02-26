@@ -1,0 +1,33 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Pizza Restaurant </title>
+	<link rel="stylesheet" type="text/css" href="{% static 'styles/bootstrap.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'styles/mainpagec.css' %}">
+	<style type= "text/css">
+		.pizzasel{
+			color: black;
+		}
+	</style>
+    {% block header %}{% endblock %}
+
+</head>
+<body>
+	<nav class="navbar navbar-light bg-success"  >
+  		<span class="navbar-brand mb-0 h1" style="color: white">Welcome!</span>
+		<a href="{% url 'getcart' %}" style="color: white; margin-left: 80%;%" ><h3>Cart</h3></a>
+  		<a href="{% url 'logout' %}" style="color: white;">Logout</a>
+	</nav>
+
+	<div class="jumbotron" style="background:transparent !important">
+		<h2 class="heading">{% block bodytitle %}{% endblock %}</h2>
+		{% block body %}
+        {% endblock %}
+
+	</div>
+	
+
+</body>
+</html>

@@ -1,0 +1,16 @@
+{% extends 'orders/base.html' %}
+
+{% block bodytitle %}Your Cart{% endblock %}
+
+{% block body %}
+    <form method="POST" action= "{% url 'placeorder' %}">
+    {% csrf_token %}
+    {% for i in details %}
+        <p>{{i}}</p>
+    {% endfor %}
+
+    <h2> Your Total bill: {{ total }} </h2>
+
+    <button type = "submit" >Place Order</button>
+    </form>
+{% endblock %}

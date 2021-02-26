@@ -1,0 +1,195 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Pizza Restaurant </title>
+	<link rel="stylesheet" type="text/css" href="{% static 'styles/bootstrap.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'styles/mainpagec.css' %}">
+	<style type= "text/css">
+		.pizzasel{
+			color: black;
+		}
+		.design{
+			float : left;
+			margin : 1.66%;
+			width: 40%;
+		}
+	</style>
+	<script>
+	window.onload = function(){
+		var divcon = document.querySelectorAll(".items");
+		
+		var divpizza = document.querySelectorAll(".ppizza");
+		var options = [];
+		var toppings = document.querySelectorAll(".toppings");
+		toppings.forEach( topping =>{
+			options.push(topping.dataset.name);
+		})
+
+		var ppizza = document.querySelectorAll(".ppizza");
+		ppizza.forEach(div =>{
+			var button = div.querySelector("button");
+			var name = button.dataset.name;
+			var nooftopp = name.charAt(name.length -1);
+			div.setAttribute("nooftopp", nooftopp);
+			for(var i =0 ; i < parseInt(nooftopp); i++){
+				var selbx = document.createElement("SELECT");
+				options.forEach(option=>{
+					var newopt = document.createElement('OPTION');
+					newopt.appendChild( document.createTextNode(option) );
+					newopt.value = option; 
+					newopt.class = "pizzasel";
+					selbx.appendChild(newopt); 
+				})
+				var innerpizza = div.querySelector("div");
+				innerpizza.append(selbx);
+			}
+		})
+
+		divpizza.forEach(ppizza =>{
+			var button = ppizza.querySelector("button");
+			button.onclick = ()=>{
+				var name = button.dataset.name;
+				var nooftopp = name.charAt(name.length -1);
+				var select = ppizza.querySelectorAll('select');
+				var toppings = "";
+				select.forEach(sel =>{
+					toppings = toppings + "," + sel.value;
+
+				})
+				toppings = toppings.substring(1);
+				var category = button.dataset.cate;
+				var order = button.dataset.name + " " + toppings;
+				console.log(category);
+				console.log(order);
+				var token  = ppizza.querySelector('input').value;
+				submitform(category, order, token);
+				return false;
+			}
+		})
+
+		var general = document.querySelectorAll(".general");
+
+		general.forEach(generali =>{
+			var pele = generali.querySelector("p");
+			//console.log(pele);
+			
+			var button = pele.querySelector("button");
+			button.onclick = ()=>{
+				var name = button.dataset.name;
+				var category = button.dataset.cate;
+				console.log(name);
+				console.log(category);
+				var token = generali.querySelector('input').value;
+				var order = name;
+				submitform(category, order, token);
+				return false;
+			}
+		})
+
+		function submitform(category, order, token){
+			var request = new XMLHttpRequest();
+			request.open('POST', '/getorder');
+			request.setRequestHeader("X-CSRFToken", token);
+
+			var data = new FormData();
+			request.onload = ()=>{
+				var response = request.responseText;
+				if( response == 'success'){
+					console.log("success");
+				}
+				else{
+					console.log("fail");
+				}
+			}
+			data.append('category', category);
+			data.append('order', order);
+			request.send(data);
+		}
+
+	};
+	</script>
+</head>
+<body>
+	<nav class="navbar navbar-light bg-success"  >
+  		<span class="navbar-brand mb-0 h1" style="color: white">Welcome!</span>
+		<a href="{% url 'vieworder' %}" style="color: white; margin-left:35%; " ><h3>My Orders</h3></a>
+		<a href="{% url 'getcart' %}" style="color: white; margin-left: 40%;" ><h3>Cart</h3></a>
+  		<a href="{% url 'logout' %}" style="color: white;">Logout</a>
+	</nav>
+
+	<div class="jumbotron" style="background:transparent !important">
+		<h2 class="heading">{% block bodytitle %}{% endblock %}</h2>
+		<div>
+			<h2> Subs </h2>
+			{% for i in subs %}
+				<form class = "ajaxform">
+				<div class = "general">
+				<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"/>
+				<p>{{ i }} - <button class= "items btn btn-outline-success my-2 my-sm-0" data-cate="subs" data-name ="{{ i }}" >add</button></p>
+				</div>
+				</form>
+			{% endfor %}
+			<h2> Pasta </h2>
+			{% for i in pasta %}
+				<form class = "ajaxform">
+				<div class = "general">
+				<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"/>
+				<p>{{ i }} - <button class= "items btn btn-outline-success my-2 my-sm-0" data-cate="pasta" data-name ="{{ i }}" >add</button></p>
+				</div>
+				</form>
+			{% endfor %}
+			<h2> Salads </h2>
+			{% for i in salads %}
+				<form class = "ajaxform">
+				<div class = "general">
+				<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"/>
+				<p>{{ i }} - <button class= "items btn btn-outline-success my-2 my-sm-0" data-cate="salads" data-name ="{{ i }}" >add</button></p>
+				</div>
+				</form>
+			{% endfor %}
+			<h2> Dinner Platter </h2>
+			{% for i in dinplatter %}
+				<form class = "ajaxform">
+				<div class = "general">
+				<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"/>
+				<p>{{ i }} - <button class= "items btn btn-outline-success my-2 my-sm-0" data-cate="dinplatter" data-name ="{{ i }}" >add</button></p>
+				</div>
+				</form>
+			{% endfor %}
+			<h2> Toppings </h2>
+			{% for i in toppings %}
+				<p class= "toppings" data-cate="toppings" data-name ="{{ i }}" >{{ i }}</p>
+			{% endfor %}
+			<h2> Regualar Pizza </h2>
+			{% for i in regularpizza %}
+				<form class= "ajaxform">
+				<div class= "ppizza">
+				<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"/>
+				<div class= "innerpizza">
+				<p>{{ i }}</p>
+				</div>
+				<button type = "submit" class= "pizza btn btn-outline-success my-2 my-sm-0" data-cate="regularpizza" data-name ="{{ i }}" >add</button>
+				</div>
+				</form>
+			{% endfor %}
+			<h2> Silican Pizza </h2>
+			{% for i in silicanpizza %}
+				<form class= "ajaxform">
+				<div class= "ppizza">
+				<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"/>
+				<div class= "innerpizza">
+				<p>{{ i }}</p>
+				</div>
+				<button class= "pizza btn btn-outline-success my-2 my-sm-0" data-cate="silicanpizza" data-name ="{{ i }}" >add</button>
+				</div>
+				</form>
+			{% endfor %}
+		</div>
+
+	</div>
+	
+
+</body>
+</html>
