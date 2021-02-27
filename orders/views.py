@@ -9,7 +9,6 @@ from django.db.models import Max
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 
-apikey ='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'
 # Create your views here.
 def index(request):
     if not request.user.is_authenticated :
